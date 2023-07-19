@@ -1,0 +1,13 @@
+/*/bin/
+/*/obj/
+.idea
+*.zip
+/*/libs/
+/.vs/
+
+NemesisRisingTidesZetAspectCompat/*/bin/
+NemesisRisingTidesZetAspectCompat/*/obj/
+NemesisRisingTidesZetAspectCompat/.idea
+NemesisRisingTidesZetAspectCompat/*.zip
+NemesisRisingTidesZetAspectCompat/*/libs/
+NemesisRisingTidesZetAspectCompat/.vs/

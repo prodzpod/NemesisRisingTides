@@ -1,0 +1,131 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Compile Remove="libs\**" />
+		<EmbeddedResource Remove="libs\**" />
+		<None Remove="libs\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BepInEx.Core" Version="5.4.19" />
+		<PackageReference Include="BepInEx.BaseLib" Version="5.4.19" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="BepInEx">
+		<HintPath>..\..\libs\BepInEx-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="com.unity.multiplayer-hlapi.Runtime">
+		<HintPath>..\..\libs\com.unity.multiplayer-hlapi.Runtime-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="HGCSharpUtils">
+		  <HintPath>..\..\libs\HGCSharpUtils-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="KinematicCharacterController">
+		  <HintPath>..\..\libs\KinematicCharacterController-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="LegacyResourcesAPI">
+		  <HintPath>..\..\libs\LegacyResourcesAPI-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="MMHOOK_RoR2">
+		<HintPath>..\..\libs\MMHOOK_RoR2-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="MysticsItemsPlugin">
+		  <HintPath>..\..\libs\MysticsItemsPlugin-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="MysticsRisky2Utils">
+		<HintPath>..\..\libs\MysticsRisky2Utils-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.ContentManagement">
+		<HintPath>..\..\libs\R2API.ContentManagement-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Core">
+		<HintPath>..\..\libs\R2API.Core-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.DamageType">
+		  <HintPath>..\..\libs\R2API.DamageType-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Dot">
+		  <HintPath>..\..\libs\R2API.Dot-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Elites">
+		<HintPath>..\..\libs\R2API.Elites-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Items">
+		  <HintPath>..\..\libs\R2API.Items-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Language">
+		<HintPath>..\..\libs\R2API.Language-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Networking">
+		<HintPath>..\..\libs\R2API.Networking-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.Prefab">
+		  <HintPath>..\..\libs\R2API.Prefab-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="RisingTides">
+		  <HintPath>..\..\libs\RisingTides-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="RoR2">
+		<HintPath>..\..\libs\RoR2-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Addressables">
+		  <HintPath>..\..\libs\Unity.Addressables-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.Postprocessing.Runtime">
+		  <HintPath>..\..\libs\Unity.Postprocessing.Runtime-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.ResourceManager">
+		  <HintPath>..\..\libs\Unity.ResourceManager-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine">
+		<HintPath>..\..\libs\UnityEngine-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AnimationModule">
+		  <HintPath>..\..\libs\UnityEngine.AnimationModule-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+		<HintPath>..\..\libs\UnityEngine.CoreModule-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ImageConversionModule">
+		  <HintPath>..\..\libs\UnityEngine.ImageConversionModule-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.ParticleSystemModule">
+		  <HintPath>..\..\libs\UnityEngine.ParticleSystemModule-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.PhysicsModule">
+		  <HintPath>..\..\libs\UnityEngine.PhysicsModule-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+		<HintPath>..\..\libs\UnityEngine.UI-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="R2API.RecalculateStats">
+			<HintPath>..\..\libs\R2API.RecalculateStats-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.AssetBundleModule">
+			<HintPath>..\..\libs\UnityEngine.AssetBundleModule-nstrip.dll</HintPath>
+		</Reference>
+		<Reference Include="WolfoQualityOfLife">
+		  <HintPath>..\..\libs\WolfoQualityOfLife-nstrip.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	
+	  <ItemGroup>
+		<None Update="manifest.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="nemesisrisingtides">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="nemesisrisingtides.manifest">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	  </ItemGroup>
+
+</Project>
