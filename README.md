@@ -71,4 +71,5 @@ Alternatively, you can disable the "zone" and have just the blind effect for T1 
 - Somewhere Else <img src="https://cdn.discordapp.com/attachments/781570609729372253/1112438647036334100/SE.jpg" width="24">
 
 ## Changelog
+- 1.0.2: fixed magnetic elites giving way too much money on death
 - 1.0.1: VFX additions, icon changes, bugfixes, fixed typos

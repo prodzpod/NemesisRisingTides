@@ -99,7 +99,7 @@ namespace NemesisRisingTides.Changes
                             if (hurtBox?.healthComponent?.body?.master?.money != null && hurtBox.healthComponent.body != damageReport.victimBody)
                                 money += hurtBox.healthComponent.body.master.money;
                         });
-                        damageReport.attackerMaster.money += (uint)Run.instance.GetDifficultyScaledCost((int)(money * KillMoneyAmount.Value * 25f));
+                        damageReport.attackerMaster.money += (uint)(money * KillMoneyAmount.Value);
                     }
                     orig(self, damageReport);
                 };
