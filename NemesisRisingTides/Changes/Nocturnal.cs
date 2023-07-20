@@ -49,6 +49,10 @@ namespace NemesisRisingTides.Changes
                     ((Night)BaseLoadableAsset.staticAssetDictionary[typeof(Night)]).vanillaTier = 2;
                     ((Night)BaseLoadableAsset.staticAssetDictionary[typeof(Night)]).isHonor = false;
                 };
+                Main.AfterBuffContentPackLoaded += () =>
+                {
+                    RisingTidesContent.Buffs.RisingTides_AffixNight.iconSprite = Main.AssetBundle.LoadAsset<Sprite>("Assets/AnglesiteBuff.png");
+                };
             }
 
             if (BoostRange.Value > 0)

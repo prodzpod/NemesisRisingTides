@@ -115,6 +115,11 @@ namespace NemesisRisingTides.Contents
                         hitPoint.hurtBox?.healthComponent?.TakeDamageForce(Physics.gravity * ForceActive.Value);
                         hitPoint.hurtBox?.healthComponent?.body?.AddTimedBuff(AffixOppressive.NoJump, ActiveDuration.Value);
                     });
+                    EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ProcStealthkit"), new EffectData
+                    {
+                        origin = equipmentSlot.characterBody.corePosition,
+                        rotation = Quaternion.identity
+                    }, transmit: true);
                     return true;
                 }
                 return false;
@@ -195,7 +200,7 @@ namespace NemesisRisingTides.Contents
 
                 public void Start()
                 {
-                    GameObject gameObject = Main.MakeAura(body, Range.Value + body.radius, new Color(0, 0, 0.5f, 0.5f));
+                    GameObject gameObject = Main.MakeAura(body, Range.Value + body.radius, new Color(1f, 0.6f, 1f, 0.25f));
                     foreach (string k in new string[] { "SphereOuter", "SphereInner" })
                     {
                         Transform t = gameObject.transform.Find(k);

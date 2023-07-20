@@ -26,7 +26,7 @@ namespace NemesisRisingTides
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "NemesisRisingTides";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
         public static ManualLogSource Log;
         public static PluginInfo pluginInfo;
         public static Harmony Harmony;

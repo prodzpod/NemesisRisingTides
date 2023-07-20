@@ -10,6 +10,7 @@ using RoR2;
 using RoR2.Projectile;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
@@ -141,7 +142,7 @@ namespace NemesisRisingTides.Changes
                         position = equipmentSlot.characterBody.corePosition,
                         procCoefficient = 1f,
                         radius = BlastRange.Value,
-                        baseDamage = BlastDamage.Value,
+                        baseDamage = BlastDamage.Value * equipmentSlot.characterBody.damage,
                         falloffModel = FalloffModel.Linear,
                         damageColorIndex = DamageColorIndex.Item,
                         attackerFiltering = AttackerFiltering.NeverHitSelf
@@ -158,6 +159,11 @@ namespace NemesisRisingTides.Changes
                             }
                         }
                     });
+                    EffectManager.SpawnEffect(GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab, new EffectData
+                    {
+                        origin = equipmentSlot.characterBody.corePosition,
+                        scale = equipmentSlot.characterBody.radius
+                    }, transmit: true);
                     __result = true;
                 }
                 return !RemoveBarrierShinanigan.Value;

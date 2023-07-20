@@ -54,10 +54,16 @@ namespace NemesisRisingTides.Changes
                     {
                         if (component.riftObject) UnityEngine.Object.DestroyImmediate(component.riftObject);
                         component.CreateRift();
+                        EffectData effectData = new()
+                        {
+                            origin = component.body.corePosition    
+                        };
+                        effectData.SetNetworkedObjectReference(component.gameObject);
+                        EffectManager.SpawnEffect(scarVFX, effectData, transmit: true);
                         __result = true;
                     }
                     return false;
-                }
+                }   
                 return true;
             }
         }

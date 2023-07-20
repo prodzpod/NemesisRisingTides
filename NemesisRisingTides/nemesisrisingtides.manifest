@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3479510365
+CRC: 2361715736
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b65159943a5d0cf048a463370eca971b
+    Hash: 89c8992a301c2d434070717526a98285
   TypeTreeHash:
     serializedVersion: 2
     Hash: 1fe3abd029edb3522ae5dbbc711d0a74
@@ -34,6 +34,7 @@ Assets:
 - Assets/BufferedRamp.png
 - Assets/Cylinder.asset
 - Assets/OppressiveCrownTexture.png
+- Assets/AnglesiteBuff.png
 - Assets/BismuthBuff.png
 - Assets/OppressiveCrown.asset
 - Assets/OppressiveBuff.png

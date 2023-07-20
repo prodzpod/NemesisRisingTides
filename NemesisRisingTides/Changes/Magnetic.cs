@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using static RisingTides.Buffs.AffixMoney;
+using static UnityEngine.UI.Image;
 
 namespace NemesisRisingTides.Changes
 {
@@ -141,13 +142,22 @@ namespace NemesisRisingTides.Changes
                         position = equipmentSlot.characterBody.corePosition,
                         procCoefficient = 1f,
                         radius = OnUseRange.Value,
-                        baseDamage = OnUseDamage.Value,
+                        baseDamage = OnUseDamage.Value * equipmentSlot.characterBody.damage,
                         falloffModel = BlastAttack.FalloffModel.Linear,
                         damageColorIndex = DamageColorIndex.Item,
                         attackerFiltering = AttackerFiltering.NeverHitSelf
                     };
-                    equipmentSlot.characterBody.master.money += (uint)Run.instance.GetDifficultyScaledCost((int)(attack.Fire().hitCount * OnUseAmount.Value * 25f));
+                    int count = attack.Fire().hitCount;
+                    equipmentSlot.characterBody.master.money += (uint)Run.instance.GetDifficultyScaledCost((int)(count * OnUseAmount.Value * 25f));
                     __result = true;
+                    EffectData effectData = new()
+                    {
+                        scale = equipmentSlot.characterBody.radius,
+                        origin = equipmentSlot.characterBody.corePosition,
+                        genericFloat = 0.6f
+                    };
+                    effectData.SetHurtBoxReference(equipmentSlot.characterBody.gameObject);
+                    for (int i = 0; i < count; i++) EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/OrbEffects/GoldOrbEffect"), effectData, transmit: true);
                     return false;
                 }
                 return false;
