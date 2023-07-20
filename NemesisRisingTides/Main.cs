@@ -26,7 +26,7 @@ namespace NemesisRisingTides
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "prodzpod";
         public const string PluginName = "NemesisRisingTides";
-        public const string PluginVersion = "1.0.2";
+        public const string PluginVersion = "1.0.3";
         public static ManualLogSource Log;
         public static PluginInfo pluginInfo;
         public static Harmony Harmony;
@@ -64,7 +64,7 @@ namespace NemesisRisingTides
             Bismuth.Init(); LanguageAPI.Add("EQUIPMENT_RISINGTIDES_AFFIXBARRIER_DESC", Bismuth.Description);
             Onyx.Init(); LanguageAPI.Add("EQUIPMENT_RISINGTIDES_AFFIXBLACKHOLE_DESC", Onyx.Description); 
             Realgar.Init(); LanguageAPI.Add("EQUIPMENT_RISINGTIDES_AFFIXIMPPLANE_DESC", Realgar.Description);
-            LanguageAPI.AddOverlay("ELITE_MODIFIER_BLIGHTED_MOFFEIN", "Obsidian {0}");
+            if (Config.Bind("Misc", "Change Blighted Name", true, "").Value) LanguageAPI.AddOverlay("ELITE_MODIFIER_BLIGHTED_MOFFEIN", "Obsidian {0}");
 
             Assembly executingAssembly = Assembly.GetExecutingAssembly(); // :3
             MysticsRisky2Utils.ContentManagement.ContentLoadHelper.PluginAwakeLoad<BaseEquipment>(executingAssembly);

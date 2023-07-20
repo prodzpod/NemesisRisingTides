@@ -1,6 +1,6 @@
 {
 	"name": "Nemesis_Rising_Tides",
-	"version_number": "1.0.2",
+	"version_number": "1.0.3",
 	"website_url": "https://github.com/prodzpod/NemesisRisingTides",
 	"description": "Reworks RisingTides elites and Adds 2 new elites. Highly configurable.",
 	"dependencies": [
