@@ -65,9 +65,11 @@ namespace NemesisRisingTides.Changes
                 Main.Harmony.PatchAll(typeof(PatchMoneyGiveBuff));
                 On.RoR2.GlobalEventManager.OnHitEnemy += (orig, self, damageInfo, _victim) =>
                 {
+                    if (damageInfo == null || damageInfo.rejected || damageInfo.procCoefficient <= 0) { orig(self, damageInfo, _victim); return; }
                     CharacterBody attacker = damageInfo.attacker?.GetComponent<CharacterBody>();
                     CharacterBody victim = _victim?.GetComponent<CharacterBody>();
-                    if (!damageInfo.rejected && damageInfo.procCoefficient > 0f && attacker != null && (attacker.HasBuff(SapMoneyBuff) || attacker.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixMoney) || damageInfo.HasModdedDamageType(magneticDamageType)) && victim != null && victim.master != null && victim.master.money > 0)
+                    if (attacker?.master != null && (attacker.HasBuff(SapMoneyBuff) || attacker.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixMoney) || damageInfo.HasModdedDamageType(magneticDamageType)) 
+                        && victim?.master != null && victim.master.money > 0)
                     {
                         uint stealCount = Math.Min(victim.master.money, (uint)Run.instance.GetDifficultyScaledCost((int)(SapMoneyAmount.Value * 25f)));
                         victim.master.money -= stealCount;

@@ -69,6 +69,7 @@ Alternatively, you can disable the "zone" and have just the blind effect for T1 
 - [Smxrez](https://thunderstore.io/package/Smxrez/): Idea guy (helped me come up with rework ideas somewhat)
 
 ## Changelog
+- 1.0.8: fixed magnetic bug
 - 1.0.7: fixed voidsent bug
 - 1.0.6: made to work with sots
 - 1.0.4: added korean translation (thanks @ggang-b on git)
