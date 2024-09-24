@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MonoMod.Utils;
 using MysticsRisky2Utils;
 using MysticsRisky2Utils.BaseAssetTypes;
 using MysticsRisky2Utils.ContentManagement;
@@ -208,9 +209,12 @@ namespace NemesisRisingTides.Contents
                         nameof(AffixBarrier.CharacterBody_RecalculateStats1),
                         nameof(AffixBarrier.CharacterBody_OnBuffFinalStackLost),
                         nameof(AffixBarrier.HealthBar_UpdateBarInfos),
-                        nameof(AffixBarrier.HealthComponent_TakeDamage) 
+                        nameof(AffixBarrier.HealthComponent_TakeDamage),
+                        "<CharacterBody_RecalculateStats1>b__12_0",
+                        "<HealthComponent_TakeDamage>b__15_0",
                     };
                     return AccessTools.GetDeclaredMethods(typeof(AffixBarrier)).Where(x => list.Contains(x.Name));
+                        // .Concat(hidden.Select(x => AccessTools.DeclaredMethod(typeof(AffixBarrier).GetNestedType("<>c", AccessTools.all), x)));
                 }
             }
 
