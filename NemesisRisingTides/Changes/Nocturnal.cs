@@ -114,7 +114,7 @@ namespace NemesisRisingTides.Changes
         private static void HandlePlayerBlindness(On.RoR2.CharacterBody.orig_FixedUpdate orig, CharacterBody body)
         {
             orig(body);
-            if (LocalUserManager.GetFirstLocalUser()?.cachedBody == body)
+            if (LocalUserManager.GetFirstLocalUser() != null && LocalUserManager.GetFirstLocalUser().cachedBody == body)
             {
                 float weight = body.HasBuff(RisingTidesContent.Buffs.RisingTides_NightReducedVision) ? 1 : 0;
                 if (weight == AngelsitePPV.weight) return;
@@ -158,7 +158,11 @@ namespace NemesisRisingTides.Changes
                 TeamMask mask = default; mask.AddTeam(body.teamComponent.teamIndex);
                 sphereSearch.FilterCandidatesByHurtBoxTeam(mask);
                 sphereSearch.GetHurtBoxes().Do(hurtBox => {
-                    if (hurtBox?.healthComponent?.body != null && hurtBox.healthComponent.body != body) hurtBox.healthComponent.body.AddTimedBuff(RisingTidesContent.Buffs.RisingTides_NightSpeedBoost, 4f);
+                    if (hurtBox
+                        && hurtBox.healthComponent
+                        && hurtBox.healthComponent.body 
+                        && hurtBox.healthComponent.body != body) 
+                        hurtBox.healthComponent.body.AddTimedBuff(RisingTidesContent.Buffs.RisingTides_NightSpeedBoost, 4f);
                 });
             }
 
@@ -191,7 +195,7 @@ namespace NemesisRisingTides.Changes
                 if (buffDef == RisingTidesContent.Buffs.RisingTides_AffixNight)
                 {
                     NemesisAffixNightBehaviour component = self.GetComponent<NemesisAffixNightBehaviour>();
-                    if (component?.enabled ?? false) component.enabled = false;
+                    if (component && component.enabled) component.enabled = false;
                 }
                 return false;
             }

@@ -58,8 +58,10 @@ namespace NemesisRisingTides.Changes
                 List<string> blacklist = DebuffBlacklist.Value.Split(',').Select(x => x.Trim()).ToList();
                 foreach (DotController.DotDef dot in DotAPI.DotDefs)
                 {
-                    string name = dot?.associatedBuff?.name;
-                    if (name == null) continue;
+                    if (dot == null
+                    || !(bool)dot.associatedBuff
+                    || dot.associatedBuff.name == null) continue;
+                    string name = dot.associatedBuff.name;
                     names.Add(name);
                     if (blacklist.Contains(name) == UseWhitelist.Value) RandomDebuffs.Add((duration, damage, attacker, victim) =>
                     {
@@ -131,7 +133,7 @@ namespace NemesisRisingTides.Changes
             public static bool Prefix(ref bool __result, EquipmentSlot equipmentSlot)
             {
                 __result = false;
-                if (equipmentSlot.characterBody == null || (DisableOnUse.Value && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player)) return false;
+                if (!equipmentSlot.characterBody || (DisableOnUse.Value && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player)) return false;
                 if (BlastRange.Value > 0 && RandomDebuffs.Count > 0)
                 {
                     BlastAttack attack = new()
@@ -149,9 +151,11 @@ namespace NemesisRisingTides.Changes
                     };
                     attack.Fire().hitPoints.Do(hitPoint =>
                     {
-                        CharacterBody body = hitPoint.hurtBox?.healthComponent?.body;
-                        if (body != null)
+                        if ((bool)hitPoint.hurtBox
+                            && (bool)hitPoint.hurtBox.healthComponent
+                            && (bool)hitPoint.hurtBox.healthComponent.body)
                         {
+                            CharacterBody body = hitPoint.hurtBox.healthComponent.body;
                             for (int i = 0; i < RandomBuffAmount.Value; i++)
                             {
                                 var action = Run.instance.runRNG.NextElementUniform(RandomDebuffs);

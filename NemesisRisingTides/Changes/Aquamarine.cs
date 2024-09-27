@@ -60,8 +60,9 @@ namespace NemesisRisingTides.Changes
 
                 On.RoR2.HealthComponent.TakeDamage += (orig, self, damageInfo) =>
                 {
-                    CharacterBody victim = self?.body;
-                    if (!damageInfo.rejected && damageInfo.procCoefficient > 0f && victim != null && (victim.HasBuff(AffectedBuff) || (IncludeSelf.Value && victim.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixWater))))
+                    if (!(bool)self) { orig(self, damageInfo); return; }
+                    CharacterBody victim = self.body;
+                    if (!damageInfo.rejected && damageInfo.procCoefficient > 0f && (bool)victim && (victim.HasBuff(AffectedBuff) || (IncludeSelf.Value && victim.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixWater))))
                     {
                         victim.AddBuff(StackBuff);
                         if (victim.GetBuffCount(StackBuff) >= NullifyHits.Value)
@@ -117,7 +118,11 @@ namespace NemesisRisingTides.Changes
                 TeamMask mask = default; mask.AddTeam(body.teamComponent.teamIndex);
                 sphereSearch.FilterCandidatesByHurtBoxTeam(mask);
                 sphereSearch.GetHurtBoxes().Do(hurtBox => {
-                    if (hurtBox?.healthComponent?.body != null && hurtBox.healthComponent.body != body) hurtBox.healthComponent.body.AddTimedBuff(AffectedBuff, 4f);
+                    if ((bool)hurtBox
+                    && (bool)hurtBox.healthComponent
+                    && (bool)hurtBox.healthComponent.body 
+                    && hurtBox.healthComponent.body != body) 
+                        hurtBox.healthComponent.body.AddTimedBuff(AffectedBuff, 4f);
                 });
             }
 
@@ -150,7 +155,7 @@ namespace NemesisRisingTides.Changes
                 if (Range.Value > 0 && buffDef == RisingTidesContent.Buffs.RisingTides_AffixWater)
                 {
                     NemesisAffixWaterBehaviour component = self.GetComponent<NemesisAffixWaterBehaviour>();
-                    if (component?.enabled ?? false) component.enabled = false;
+                    if ((bool)component && component.enabled) component.enabled = false;
                 }
                 return false;
             }

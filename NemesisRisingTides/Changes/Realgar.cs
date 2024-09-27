@@ -49,9 +49,11 @@ namespace NemesisRisingTides.Changes
                 if (DisableOnUse.Value && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player) return false;
                 if (ChangeOnUse.Value)
                 {
-                    RisingTidesAffixImpPlaneBehaviour component = equipmentSlot.characterBody?.GetComponent<RisingTidesAffixImpPlaneBehaviour>();
-                    if (component != null)
+                    if (equipmentSlot
+                        && equipmentSlot.characterBody
+                        && equipmentSlot.characterBody.GetComponent<RisingTidesAffixImpPlaneBehaviour>())
                     {
+                        RisingTidesAffixImpPlaneBehaviour component = equipmentSlot.characterBody.GetComponent<RisingTidesAffixImpPlaneBehaviour>();
                         if (component.riftObject) UnityEngine.Object.DestroyImmediate(component.riftObject);
                         component.CreateRift();
                         EffectData effectData = new()

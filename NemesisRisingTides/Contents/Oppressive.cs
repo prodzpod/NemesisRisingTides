@@ -73,7 +73,7 @@ namespace NemesisRisingTides.Contents
                     foreach (CharacterBody allBodyPrefabBodyBodyComponent in BodyCatalog.allBodyPrefabBodyBodyComponents)
                     {
                         CharacterModel componentInChildren = allBodyPrefabBodyBodyComponent.GetComponentInChildren<CharacterModel>();
-                        if ((bool)componentInChildren && componentInChildren.itemDisplayRuleSet != null)
+                        if ((bool)componentInChildren && componentInChildren.itemDisplayRuleSet)
                         {
                             DisplayRuleGroup equipmentDisplayRuleGroup = componentInChildren.itemDisplayRuleSet.GetEquipmentDisplayRuleGroup(RoR2Content.Equipment.AffixWhite.equipmentIndex);
                             if (!equipmentDisplayRuleGroup.Equals(DisplayRuleGroup.empty))
@@ -93,8 +93,12 @@ namespace NemesisRisingTides.Contents
 
             public override bool OnUse(EquipmentSlot equipmentSlot)
             {
-                if (DisableOnUse.Value && equipmentSlot?.characterBody?.teamComponent?.teamIndex != TeamIndex.Player) return false;
-                if (equipmentSlot.characterBody == null || (DisableOnUse.Value && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player)) return false;
+                if (DisableOnUse.Value 
+                    && equipmentSlot
+                    && equipmentSlot.characterBody
+                    && equipmentSlot.characterBody.teamComponent
+                    && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player) return false;
+                if (!equipmentSlot.characterBody || (DisableOnUse.Value && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player)) return false;
                 if (ForceRange.Value > 0)
                 {
                     BlastAttack attack = new()
@@ -112,8 +116,11 @@ namespace NemesisRisingTides.Contents
                     };
                     attack.Fire().hitPoints.Do(hitPoint =>
                     {
-                        hitPoint.hurtBox?.healthComponent?.TakeDamageForce(Physics.gravity * ForceActive.Value);
-                        hitPoint.hurtBox?.healthComponent?.body?.AddTimedBuff(AffixOppressive.NoJump, ActiveDuration.Value);
+                        if (!hitPoint.hurtBox
+                            || !hitPoint.hurtBox.healthComponent
+                            || !hitPoint.hurtBox.healthComponent.body) return;
+                        hitPoint.hurtBox.healthComponent.TakeDamageForce(Physics.gravity * ForceActive.Value);
+                        hitPoint.hurtBox.healthComponent.body.AddTimedBuff(AffixOppressive.NoJump, ActiveDuration.Value);
                     });
                     EffectManager.SpawnEffect(LegacyResourcesAPI.Load<GameObject>("Prefabs/Effects/ProcStealthkit"), new EffectData
                     {
@@ -218,8 +225,12 @@ namespace NemesisRisingTides.Contents
                     if (!body.healthComponent || !body.healthComponent.alive || !NetworkServer.active) return;
                     Physics.OverlapCapsule(body.corePosition, body.corePosition + (Vector3.up * 200f), auraRadius).Do(collider =>
                     {
-                        CharacterBody victim = collider.GetComponent<HurtBox>()?.healthComponent?.body;
-                        if (victim == null || !FriendlyFireManager.ShouldDirectHitProceed(victim.healthComponent, body.teamComponent.teamIndex)) return;
+                        if (!collider
+                            || !collider.GetComponent<HurtBox>()
+                            || !collider.GetComponent<HurtBox>().healthComponent
+                            || !collider.GetComponent<HurtBox>().healthComponent.body) return;
+                        CharacterBody victim = collider.GetComponent<HurtBox>().healthComponent.body;
+                        if (!victim || !FriendlyFireManager.ShouldDirectHitProceed(victim.healthComponent, body.teamComponent.teamIndex)) return;
                         victim.AddTimedBuff(StrongerGravity, 4f);
                     });
                 }
@@ -234,8 +245,8 @@ namespace NemesisRisingTides.Contents
                 public void Start() { body = GetComponent<CharacterBody>(); }
                 public void FixedUpdate()
                 {
-                    if (!NetworkServer.active) return;
-                    body.healthComponent?.TakeDamageForce(Physics.gravity * Time.fixedDeltaTime * ForcePassive.Value, alwaysApply: true);
+                    if (!NetworkServer.active || !body || !body.healthComponent) return;
+                    body.healthComponent.TakeDamageForce(Physics.gravity * Time.fixedDeltaTime * ForcePassive.Value, alwaysApply: true);
                 }
             }
             public class NoJumpBehaviour : MonoBehaviour
@@ -244,7 +255,7 @@ namespace NemesisRisingTides.Contents
                 public void Start() { body = GetComponent<CharacterBody>(); }
                 public void FixedUpdate()
                 {
-                    if (!NetworkServer.active || body.characterMotor == null) return;
+                    if (!NetworkServer.active || !body.characterMotor) return;
                     if (body.characterMotor.velocity.y > 0) body.characterMotor.velocity.y = 0;
                 }
             }
@@ -304,7 +315,8 @@ namespace NemesisRisingTides.Contents
                     effectData.SetNetworkedObjectReference(victimInfo.gameObject);
                     EffectManager.SpawnEffect(gravityVFX, effectData, transmit: true);
                     victimInfo.body.AddTimedBuff(NoJump, DisableDuration.Value);
-                    victimInfo.healthComponent?.TakeDamageForce(Physics.gravity * ForcePassive.Value, alwaysApply: true);
+                    if (victimInfo.healthComponent) 
+                        victimInfo.healthComponent.TakeDamageForce(Physics.gravity * ForcePassive.Value, alwaysApply: true);
                 }
             }
         }

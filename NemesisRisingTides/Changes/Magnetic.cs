@@ -65,16 +65,21 @@ namespace NemesisRisingTides.Changes
                 Main.Harmony.PatchAll(typeof(PatchMoneyGiveBuff));
                 On.RoR2.GlobalEventManager.OnHitEnemy += (orig, self, damageInfo, _victim) =>
                 {
-                    if (damageInfo == null || damageInfo.rejected || damageInfo.procCoefficient <= 0) { orig(self, damageInfo, _victim); return; }
-                    CharacterBody attacker = damageInfo.attacker?.GetComponent<CharacterBody>();
-                    CharacterBody victim = _victim?.GetComponent<CharacterBody>();
-                    if (attacker?.master != null && (attacker.HasBuff(SapMoneyBuff) || attacker.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixMoney) || damageInfo.HasModdedDamageType(magneticDamageType)) 
-                        && victim?.master != null && victim.master.money > 0)
-                    {
-                        uint stealCount = Math.Min(victim.master.money, (uint)Run.instance.GetDifficultyScaledCost((int)(SapMoneyAmount.Value * 25f)));
-                        victim.master.money -= stealCount;
-                        attacker.master.money += (uint)(stealCount * GainMoneyAmount.Value);
-                    }
+                    if (damageInfo == null
+                        || damageInfo.rejected
+                        || damageInfo.procCoefficient <= 0
+                        || !damageInfo.attacker
+                        || !damageInfo.attacker.GetComponent<CharacterBody>()
+                        || !_victim
+                        || !_victim.GetComponent<CharacterBody>()) { orig(self, damageInfo, _victim); return; }
+                    CharacterBody attacker = damageInfo.attacker.GetComponent<CharacterBody>();
+                    CharacterBody victim = _victim.GetComponent<CharacterBody>();
+                    if (!(attacker.HasBuff(SapMoneyBuff) || attacker.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixMoney) || damageInfo.HasModdedDamageType(magneticDamageType))
+                        || !victim.master
+                        || victim.master.money <= 0) { orig(self, damageInfo, _victim); return; }
+                    uint stealCount = Math.Min(victim.master.money, (uint)Run.instance.GetDifficultyScaledCost((int)(SapMoneyAmount.Value * 25f)));
+                    victim.master.money -= stealCount;
+                    if (attacker.master) attacker.master.money += (uint)(stealCount * GainMoneyAmount.Value);
                     orig(self, damageInfo, _victim);
                 };
             }
@@ -82,7 +87,7 @@ namespace NemesisRisingTides.Changes
             {
                 On.RoR2.GlobalEventManager.OnCharacterDeath += (orig, self, damageReport) =>
                 {
-                    if (damageReport.attackerMaster != null && damageReport.attackerMaster.money != 0 && damageReport.victimBody != null && damageReport.victimBody.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixMoney))
+                    if (damageReport.attackerMaster && damageReport.attackerMaster.money != 0 && damageReport.victimBody && damageReport.victimBody.HasBuff(RisingTidesContent.Buffs.RisingTides_AffixMoney))
                     {
                         SphereSearch sphereSearch = new()
                         {
@@ -98,7 +103,11 @@ namespace NemesisRisingTides.Changes
 
                         float money = 0;
                         sphereSearch.GetHurtBoxes().Do(hurtBox => {
-                            if (hurtBox?.healthComponent?.body?.master?.money != null && hurtBox.healthComponent.body != damageReport.victimBody)
+                            if ((bool)hurtBox
+                                && (bool)hurtBox.healthComponent
+                                && (bool)hurtBox.healthComponent.body
+                                && (bool)hurtBox.healthComponent.body.master
+                                && hurtBox.healthComponent.body != damageReport.victimBody)
                                 money += hurtBox.healthComponent.body.master.money;
                         });
                         damageReport.attackerMaster.money += (uint)(money * KillMoneyAmount.Value);
@@ -122,7 +131,12 @@ namespace NemesisRisingTides.Changes
                 __instance.sphereSearch.FilterCandidatesByHurtBoxTeam(mask);
                 __instance.sphereSearch.GetHurtBoxes().Do(hurtBox =>
                 {
-                    if (hurtBox.healthComponent?.body?.master != null && hurtBox.healthComponent.body != __instance.body) hurtBox.healthComponent.body.AddTimedBuff(SapMoneyBuff, 4f);
+                    if (hurtBox
+                        && hurtBox.healthComponent
+                        && hurtBox.healthComponent.body
+                        && hurtBox.healthComponent.body.master 
+                        && hurtBox.healthComponent.body != __instance.body) 
+                        hurtBox.healthComponent.body.AddTimedBuff(SapMoneyBuff, 4f);
                 });
                 return false;
             }
@@ -134,7 +148,11 @@ namespace NemesisRisingTides.Changes
             public static bool Prefix(ref bool __result, EquipmentSlot equipmentSlot)
             {
                 __result = false;
-                if (equipmentSlot.characterBody?.master != null && equipmentSlot.characterBody.teamComponent.teamIndex == TeamIndex.Player && NetworkServer.active && OnUseCooldown.Value > 0) // nuke if cooldown is 0
+                if (NetworkServer.active 
+                    && equipmentSlot.characterBody
+                    && equipmentSlot.characterBody.master
+                    && equipmentSlot.characterBody.teamComponent.teamIndex == TeamIndex.Player 
+                    && OnUseCooldown.Value > 0) // nuke if cooldown is 0
                 {
                     BlastAttack attack = new()
                     {

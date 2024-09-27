@@ -99,7 +99,11 @@ namespace NemesisRisingTides.Contents
 
             public override bool OnUse(EquipmentSlot equipmentSlot)
             {
-                if (DisableOnUse.Value && equipmentSlot?.characterBody?.teamComponent?.teamIndex != TeamIndex.Player) return false;
+                if (DisableOnUse.Value
+                    && equipmentSlot
+                    && equipmentSlot.characterBody
+                    && equipmentSlot.characterBody.teamComponent
+                    && equipmentSlot.characterBody.teamComponent.teamIndex != TeamIndex.Player) return false;
                 if ((bool)equipmentSlot.characterBody)
                 {
                     EffectData effectData = new()
@@ -164,7 +168,9 @@ namespace NemesisRisingTides.Contents
                 On.RoR2.GlobalEventManager.OnCharacterDeath += (orig, self, damageReport) =>
                 {
                     orig(self, damageReport);
-                    if (damageReport.victimBody?.HasBuff(buffDef) ?? false)
+                    if (damageReport != null
+                        && damageReport.victimBody 
+                        && damageReport.victimBody.HasBuff(buffDef))
                     {
                         SphereSearch sphereSearch = new()
                         {
@@ -178,7 +184,10 @@ namespace NemesisRisingTides.Contents
                         TeamMask mask = default; mask.AddTeam(damageReport.victimBody.teamComponent.teamIndex);
                         sphereSearch.FilterCandidatesByHurtBoxTeam(mask);
                         sphereSearch.GetHurtBoxes().Do(hurtBox => {
-                            if (hurtBox?.healthComponent?.body != null && hurtBox.healthComponent.body != damageReport.victimBody)
+                            if (hurtBox
+                                && hurtBox.healthComponent
+                                && hurtBox.healthComponent.body 
+                                && hurtBox.healthComponent.body != damageReport.victimBody)
                                 hurtBox.healthComponent.AddBarrier(hurtBox.healthComponent.body.maxHealth * DeathHealth.Value);
                         });
                     }
